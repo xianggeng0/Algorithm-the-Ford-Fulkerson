@@ -5,7 +5,8 @@ The maximum flow problem (or network flow problem) is a well-known optimization 
 In the maximum flow problem, a network is modeled as a directed graph, where each edge has a capacity constraint, representing the maximum amount of flow that can pass through it. The goal is to find a flow through the network that is feasible (i.e., does not exceed the capacity of any edge) and maximal (i.e., it is not possible to push more flow through the network without violating the capacity constraints).
 
 The maximum flow problem has numerous applications, including network traffic management, water distribution systems, supply chain management, and more. It can be solved using a variety of algorithms, including the Ford-Fulkerson algorithm, the Edmonds-Karp algorithm, and the Push-Relabel algorithm.
-                                                                   **网络流堆叠条形图**
+
+The image below is a stacked bar chart for network flow：
 
 ![20240513_194525-ezgif com-crop](https://github.com/xianggeng0/Algorithm-the-Ford-Fulkerson-algorithm/assets/143009989/7445fb4c-5611-40a6-8e8a-876f1e158b2d)
 ### Problem Statement
