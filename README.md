@@ -38,4 +38,3 @@ The maximum flow problem can be solved using algorithms such as the Ford-Fulkers
 * Image segmentation
 * Bipartite matching
 
-This README.md provides a concise overview of the maximum flow problem. For more detailed information, please refer to the relevant literature on graph theory and optimization algorithms.
