@@ -6,6 +6,7 @@ In the maximum flow problem, a network is modeled as a directed graph, where eac
 
 The maximum flow problem has numerous applications, including network traffic management, water distribution systems, supply chain management, and more. It can be solved using a variety of algorithms, including the Ford-Fulkerson algorithm, the Edmonds-Karp algorithm, and the Push-Relabel algorithm.
 
+![20240513_194525-ezgif com-crop](https://github.com/xianggeng0/Algorithm-the-Ford-Fulkerson-algorithm/assets/143009989/7445fb4c-5611-40a6-8e8a-876f1e158b2d)
 ### Problem Statement
 
 **Given:** A directed graph G representing a network with nodes and edges, where each edge has a capacity constraint.
