@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>网络流堆叠条形图</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div id="main" style="width: 800px;height:600px;"></div>
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var test_network = [
+            [0, 70, 100, 90, 0, 0],
+            [0, 0, 0, 0, 0, 80],
+            [0, 0, 0, 40, 70, 0],
+            [0, 0, 0, 0, 40, 100],
+            [0, 0, 0, 0, 0, 90],
+            [0, 0, 0, 0, 0, 0],
+        ];
+
+        var routes = [
+            { id: 'Route-1', path: ['0', '1', '5'], flow: 70 },
+            { id: 'Route-2', path: ['0', '2', '3', '4', '5'], flow: 40 },
+            { id: 'Route-3', path: ['0', '2', '4', '3', '5'], flow: 40 },
+            { id: 'Route-4', path: ['0', '2', '4', '5'], flow: 20 },
+            { id: 'Route-5', path: ['0', '3', '2', '4', '5'], flow: 10 },
+            { id: 'Route-6', path: ['0', '3', '4', '5'], flow: 20 },
+            { id: 'Route-7', path: ['0', '3', '5'], flow: 60 }
+        ];
+
+        var seriesData = routes.map(route => {
+            var data = new Array(test_network.length).fill(0);
+            route.path.forEach((node, index) => {
+                var nextNode = route.path[index + 1];
+                if (nextNode) {
+                    data[parseInt(node)] = route.flow;
+                }
+            });
+            return {
+                name: route.id,
+                type: 'bar',
+                stack: 'total',
+                data: data,
+                emphasis: {
+                    focus: 'series'
+                }
+            };
+        });
+
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: routes.map(route => route.id)
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: test_network.map((_, index) => index.toString()),
+                name: '节点'
+            },
+            yAxis: {
+                type: 'value',
+                name: '流量'
+            },
+            series: seriesData
+        };
+
+        myChart.setOption(option);
+    </script>
+</body>
+</html>
