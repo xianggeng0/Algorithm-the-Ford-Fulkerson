@@ -1,95 +1,61 @@
-class Node:
-    def __init__(self, name, arc_dict):
-        self.name = name
-        self.arc_dict = arc_dict
+from collections import defaultdict
 
+class Graph:
+    def __init__(self, graph):
+        self.graph = graph
+        self.ROW = len(graph)
 
-def create_node(name, next_list, flow_list):
-    arc_dict = {}
-    for i in range(len(next_list)):
-        arc_dict[next_list[i]] = flow_list[i]
-    return Node(name, arc_dict)
-
-
-def Ford_Fulkerson_Solve(s, e, node_list, name_index_dict):
-   
-    routes = []
-    while True:
-        res = dfs(e, [s], None, node_list, name_index_dict)
-        if res is None:
-            return routes
-        routes.append(res)
-        route, flow = res
-        for i in range(len(route) - 1):
-            n1 = node_list[name_index_dict[route[i]]]
-            n2 = node_list[name_index_dict[route[i + 1]]]
-            if n2.name in n1.arc_dict.keys() and n1.arc_dict[n2.name] is not None:
-                n1.arc_dict[n2.name] = n1.arc_dict[n2.name] - flow
-            if n1.name in n2.arc_dict.keys() and n2.arc_dict[n1.name] is not None:
-                n2.arc_dict[n1.name] = n2.arc_dict[n1.name] + flow
-
-
-def dfs(e, cur_route, last_flow, node_list, name_index_dict):
-   
-    if cur_route[-1] == e:
-        return cur_route, last_flow
-    index = name_index_dict[cur_route[-1]]
-    for next_node_name in node_list[index].arc_dict.keys():
-        if next_node_name not in cur_route:
-            flow = node_list[index].arc_dict[next_node_name]
-            if flow is None or flow > 0:
-                cur_route.append(next_node_name)
-                res = dfs(e, cur_route, min_flow(last_flow, flow), node_list, name_index_dict)
-                if res is not None:
-                    return res
-                cur_route.pop(-1)
-
-
-def min_flow(f1, f2):
-   
-    if f1 is None:
-        return f2
-    elif f2 is None:
-        return f1
-    else:
-        return min(f1, f2)
-
-
-def main(network, source, destination):
-    nn = len(network)  
-    max_flow = 0  
-    pred_node = [-1] * nn  
-
-    while True:
-        visited = [0] * nn
-        queue = [source]
-        visited[source] = 1
-
+    def BFS(self, s, t, parent):
+        visited = [False] * (self.ROW)
+        queue = [s]
+        visited[s] = True
         while queue:
-            node = queue.pop()
-            for next_node, val in enumerate(network[node]):
-                if visited[next_node] == 0 and val > 0:
-                    queue.append(next_node)
-                    visited[next_node] = 1
-                    pred_node[next_node] = node
+            u = queue.pop(0)
+            for ind, val in enumerate(self.graph[u]):
+                if visited[ind] is False and val > 0:
+                    queue.append(ind)
+                    visited[ind] = True
+                    parent[ind] = u
+        return True if visited[t] else False
 
-        if visited[destination] == 0:
-            break
+    def FordFulkerson(self, source, sink):
+        parent = [-1] * (self.ROW)
+        max_flow = 0
+        paths = []  # 用于存储水流路径（0——0）
+        while self.BFS(source, sink, parent):
+            path_flow = float("Inf")
+            s = sink
+            while s != source:
+                path_flow = min(path_flow, self.graph[parent[s]][s])
+                s = parent[s]
 
-        flow = float('inf')
-        node = destination
-        while node != source:
-            flow = min(flow, network[pred_node[node]][node])
-            node = pred_node[node]
-        max_flow += flow
+            # Add path flow to overall flow
+            max_flow += path_flow
 
-        node = destination
-        while node != source:
-            network[node][pred_node[node]] += flow
-            network[pred_node[node]][node] -= flow
-            node = pred_node[node]
-    return max_flow
+            # 记录水流路径{*_*}
+            path = []
+            v = sink
+            while v != source:
+                path.append(v)
+                v = parent[v]
+            path.append(source)
+            paths.append((path[::-1], path_flow))  # 将路径反转并存储 [--]!
 
+            v = sink
+            while v != source:
+                u = parent[v]
+                self.graph[u][v] -= path_flow
+                self.graph[v][u] += path_flow
+                v = parent[v]
+
+        return max_flow, paths
+
+def main(test_network, s, d):
+    g = Graph(test_network)
+    max_flow, paths = g.FordFulkerson(s, d)
+    print(f"最大流：{max_flow}")
+    for i, (path, flow) in enumerate(paths):
+        print(f"router-{i+1}：{path} 流值：{flow}")
 
 if __name__ == '__main__':
     test_network = [
@@ -102,19 +68,4 @@ if __name__ == '__main__':
     ]
     s = 0
     d = 5
-
-    # 构建节点网络
-    node_list = []
-    name_index_dict = {}
-    for i in range(len(test_network)):
-        node_list.append(create_node(str(i), [str(j) for j in range(len(test_network[i]))], test_network[i]))
-        name_index_dict[str(i)] = i
-
-    # 调用 Ford-Fulkerson 算法求解最大流
-    max_flow = main(test_network, s, d)
-    print(f"Max flow: {max_flow}")
-
-    # 调用 Ford-Fulkerson-Solve 算法求解增广路径
-    routes = Ford_Fulkerson_Solve(str(s), str(d), node_list, name_index_dict)
-    for i, (route, flow) in enumerate(routes):
-        print(f"Route-{i + 1}: {route} , flow: {flow}")
+    main(test_network, s, d)
