@@ -1,82 +1,145 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>网络流堆叠条形图</title>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+  <meta charset="utf-8">
+  <title>最大流可视化</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
 </head>
 <body>
-    <div id="main" style="width: 800px;height:600px;"></div>
-    <script type="text/javascript">
-        var myChart = echarts.init(document.getElementById('main'));
+  <div id="sankeyChart" style="width: 800px; height: 400px;"></div>
+  <script>
+    var chartDom = document.getElementById('sankeyChart');
+    var myChart = echarts.init(chartDom);
+    var option;
 
-        var test_network = [
-            [0, 70, 100, 90, 0, 0],
-            [0, 0, 0, 0, 0, 80],
-            [0, 0, 0, 40, 70, 0],
-            [0, 0, 0, 0, 40, 100],
-            [0, 0, 0, 0, 0, 90],
-            [0, 0, 0, 0, 0, 0],
-        ];
+    option = {
+      tooltip: {
+        trigger: 'item',
+        triggerOn: 'mousemove',
+        formatter: function (params) {
+          if (params.dataType === 'edge') {
+            return `${params.data.source} --> ${params.data.target}: ${params.data.value}`;
+          }
+        },
+      },
+      series: [
+        {
+          type: 'sankey',
+          data: [
+            { name: '0' },
+            { name: '1' },
+            { name: '2' },
+            { name: '3' },
+            { name: '4' },
+            { name: '5' },
+          ],
+          links: [
+            { source: '0', target: '1', value: 70 },
+            { source: '1', target: '5', value: 70 },
+            { source: '0', target: '2', value: 100 }, 
+            { source: '0', target: '3', value: 90 },
+            { source: '2', target: '3', value: 30 }, 
+            { source: '2', target: '4', value: 160 }, 
+            { source: '3', target: '5', value: 100 }, 
+            { source: '4', target: '5', value: 90 }, 
+          ],
+          lineStyle: {
+            color: 'gradient',
+            curveness: 0.5,
+          },
+          label: {
+            show: true,
+            position: 'right',
+            formatter: '{b}',
+          },
+          itemStyle: {
+            borderWidth: 1,
+            borderColor: '#aaa',
+          },
+          emphasis: {
+            focus: 'adjacency',
+          },
+        },
+      ],
+    };
 
-        var routes = [
-            { id: 'Route-1', path: ['0', '1', '5'], flow: 70 },
-            { id: 'Route-2', path: ['0', '2', '3', '4', '5'], flow: 40 },
-            { id: 'Route-3', path: ['0', '2', '4', '3', '5'], flow: 40 },
-            { id: 'Route-4', path: ['0', '2', '4', '5'], flow: 20 },
-            { id: 'Route-5', path: ['0', '3', '2', '4', '5'], flow: 10 },
-            { id: 'Route-6', path: ['0', '3', '4', '5'], flow: 20 },
-            { id: 'Route-7', path: ['0', '3', '5'], flow: 60 }
-        ];
-
-        var seriesData = routes.map(route => {
-            var data = new Array(test_network.length).fill(0);
-            route.path.forEach((node, index) => {
-                var nextNode = route.path[index + 1];
-                if (nextNode) {
-                    data[parseInt(node)] = route.flow;
-                }
-            });
-            return {
-                name: route.id,
-                type: 'bar',
-                stack: 'total',
-                data: data,
-                emphasis: {
-                    focus: 'series'
-                }
-            };
-        });
-
-        var option = {
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
-            legend: {
-                data: routes.map(route => route.id)
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                data: test_network.map((_, index) => index.toString()),
-                name: '节点'
-            },
-            yAxis: {
-                type: 'value',
-                name: '流量'
-            },
-            series: seriesData
-        };
-
-        myChart.setOption(option);
-    </script>
+    option && myChart.setOption(option);
+  </script>
 </body>
+<body>
+    <div id="chart" style="width: 800px; height: 400px;"></div>
+    <script>
+      var chartDom = document.getElementById('chart');
+      var myChart = echarts.init(chartDom);
+      var option;
+  
+      option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow',
+          },
+        },
+        xAxis: {
+          type: 'category',
+          data: ['0', '1', '2', '3', '4', '5'],
+        },
+        yAxis: {
+          type: 'value',
+        },
+        series: [
+          {
+            name: '0 -> 1',
+            type: 'bar',
+            stack: 'total',
+            data: [70, 0, 0, 0, 0, 0],
+          },
+          {
+            name: '1 -> 5',
+            type: 'bar',
+            stack: 'total',
+            data: [0, 70, 0, 0, 0, 0],
+          },
+          {
+            name: '0 -> 2',
+            type: 'bar',
+            stack: 'total',
+            data: [100, 0, 0, 0, 0, 0],
+          },
+          {
+            name: '0 -> 3',
+            type: 'bar',
+            stack: 'total',
+            data: [90, 0, 0, 0, 0, 0],
+          },
+          {
+            name: '2 -> 3',
+            type: 'bar',
+            stack: 'total',
+            data: [0, 0, 30, 0, 0, 0],
+          },
+          {
+            name: '2 -> 4',
+            type: 'bar',
+            stack: 'total',
+            data: [0, 0, 160, 0, 0, 0],
+          },
+          {
+            name: '3 -> 5',
+            type: 'bar',
+            stack: 'total',
+            data: [0, 0, 0, 100, 0, 0],
+          },
+          {
+            name: '4 -> 5',
+            type: 'bar',
+            stack: 'total',
+            data: [0, 0, 0, 0, 90, 0],
+          },
+        ],
+      };
+  
+      option && myChart.setOption(option);
+    </script>
+  </body>
 </html>
