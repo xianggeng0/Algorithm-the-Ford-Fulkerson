@@ -8,7 +8,7 @@ The maximum flow problem has numerous applications, including network traffic ma
 
 The image below is a stacked bar chart for network flow：
 
-![20240513_194525-ezgif com-crop](https://github.com/xianggeng0/Algorithm-the-Ford-Fulkerson-algorithm/assets/143009989/7445fb4c-5611-40a6-8e8a-876f1e158b2d)
+![ezgif com-video-to-gif-converter](https://github.com/xianggeng0/Algorithm-the-Ford-Fulkerson-algorithm/assets/143009989/47561138-6313-4a54-a034-f1139b2e0e5f)
 ### Problem Statement
 
 **Given:** A directed graph G representing a network with nodes and edges, where each edge has a capacity constraint.
