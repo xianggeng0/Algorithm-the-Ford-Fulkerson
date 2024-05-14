@@ -54,6 +54,27 @@ The Ford-Fulkerson algorithm does not simulate the actual flow direction in a ne
 - **Understanding Direction**: When utilizing the Ford-Fulkerson algorithm, it's crucial to understand that the direction of augmenting paths does not represent the actual flow direction.  
 - **Efficiency**: The efficiency of the algorithm depends on the strategy used to select augmenting paths. Different strategies can lead to varying runtimes and performance.  
 - **Optimization**: In practical applications, it may be necessary to combine the Ford-Fulkerson algorithm with other techniques or optimizations to improve the efficiency of solving the maximum flow problem.    
+
+## Ford-Fulkerson Algorithm: A Powerful but Potentially Slow Solution for Maximum Flow Problems
+
+The Ford-Fulkerson algorithm is a classic method for finding the maximum flow in a network. While it guarantees an optimal solution, its time complexity can be problematic, as it depends on the maximum flow value, which can be arbitrarily large.
+
+### Time Complexity:
+
+* **Worst-case:** If the algorithm repeatedly selects the shortest augmenting path, the time complexity becomes **O(E * f)**, where E represents the number of edges in the network, and f is the maximum flow value. 
+* **Average-case:** In practical scenarios, the time complexity is usually lower than the worst-case. However, providing a precise bound remains challenging.
+
+### Limitations:
+
+The dependency on the maximum flow value (f) for time complexity makes the Ford-Fulkerson algorithm inefficient for networks with large flow capacities.  
+
+### Alternatives:
+
+Fortunately, improved algorithms like the Edmonds-Karp algorithm address this limitation.  Edmonds-Karp guarantees a polynomial time solution by employing a specific strategy for selecting augmenting paths (using Breadth-First Search). 
+
+### Conclusion:
+
+While the Ford-Fulkerson algorithm provides a foundational understanding of maximum flow problems, its potential for slow performance in certain cases necessitates the use of more efficient alternatives like Edmonds-Karp in practical applications. 
   
 
 ### Applications
